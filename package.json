@@ -1,32 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&family=Share+Tech+Mono&display=swap');
-
-:root {
-  --yellow: #f5c500;
-  --bg: #0c111a;
-  --navy: #0f1623;
-  --navy2: #111827;
-  --border: rgba(255,255,255,0.06);
-  --text: #cbd5e1;
-  --muted: #3d4a5c;
-  --muted2: #6b7a8d;
-  --red: #f87171;
-  --green: #6ecfa8;
+{
+  "name": "chicago-rp-allowlist",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18"
+  }
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Barlow', sans-serif;
-  font-weight: 300;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-::selection { background: var(--yellow); color: #000; }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 3px; }

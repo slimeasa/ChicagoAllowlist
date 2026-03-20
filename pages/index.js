@@ -2,51 +2,43 @@ import { useState } from 'react';
 import Head from 'next/head';
 import styles from './index.module.css';
 
+const SCENE_IMG = '/scene.png';
+
 const FIELDS = [
-  { id: 'nome', label: 'Nome Completo', placeholder: 'Seu nome real', type: 'text', required: true },
-  { id: 'discord', label: 'Discord', placeholder: 'usuario#0000 ou @usuario', type: 'text', required: true },
-  { id: 'idade', label: 'Idade', placeholder: 'Sua idade', type: 'number', required: true, min: 16 },
-  { id: 'personagem', label: 'Nome do Personagem', placeholder: 'Como seu personagem será chamado', type: 'text', required: true },
+  { id: 'nome',       label: 'Nome Real',              placeholder: 'Seu nome real',                                         type: 'text',     required: true },
+  { id: 'discord',    label: 'Discord',                 placeholder: 'usuario ou @usuario',                                   type: 'text',     required: true },
+  { id: 'idade',      label: 'Idade',                   placeholder: 'Sua idade',                                             type: 'number',   required: true, min: 16 },
+  { id: 'personagem', label: 'Nome do Personagem',      placeholder: 'Como seu personagem será chamado',                      type: 'text',     required: true },
+  { id: 'historia',   label: 'História do Personagem',  placeholder: 'Conte a origem e motivação do seu personagem (mín. 100 caracteres)...', type: 'textarea', required: true, minLength: 100 },
+  { id: 'experiencia',label: 'Experiência com Roleplay',placeholder: 'Você já participou de outros servidores? Qual seu nível de experiência?', type: 'textarea', required: true },
+  { id: 'motivacao',  label: 'Por que você deve entrar?',placeholder: 'Nos convença por que você merece uma vaga...', type: 'textarea', required: true },
   {
-    id: 'historia',
-    label: 'História do Personagem',
-    placeholder: 'Conte a origem e motivação do seu personagem (mín. 100 caracteres)...',
-    type: 'textarea',
-    required: true,
-    minLength: 100,
-  },
-  {
-    id: 'experiencia',
-    label: 'Experiência com Roleplay',
-    placeholder: 'Você já participou de outros servidores? Qual seu nível de experiência?',
-    type: 'textarea',
-    required: true,
-  },
-  {
-    id: 'regras',
-    label: 'Por que você deve entrar no Chicago RP?',
-    placeholder: 'Nos convença por que você merece uma vaga...',
-    type: 'textarea',
-    required: true,
+    id: 'chatlog', label: 'Chatlog da Cena — Interpretação', type: 'chatlog', required: true, minLength: 80,
+    placeholder: 'Interprete a cena acima em chatlog usando as marcações:\n— Fala normal\n* Ação /me ou /do\n(( OOC ))\n# Ligação celular\n! Sistema',
   },
 ];
 
-export default function Home() {
-  const [form, setForm] = useState({});
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error
-  const [errorMsg, setErrorMsg] = useState('');
+const LEGEND = [
+  { prefix: '—',   color: '#ffffff', label: 'fala normal' },
+  { prefix: '*',   color: '#c084fc', label: '/me e /do' },
+  { prefix: '((',  color: '#94a3b8', label: 'OOC' },
+  { prefix: '#',   color: '#7dd3fc', label: 'ligação' },
+  { prefix: '!',   color: '#f87171', label: 'sistema' },
+];
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  };
+export default function Home() {
+  const [form, setForm]     = useState({});
+  const [status, setStatus] = useState('idle');
+  const [errorMsg, setErr]  = useState('');
+
+  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.id]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    setErrorMsg('');
-
+    setErr('');
     try {
-      const res = await fetch('/api/apply', {
+      const res  = await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -56,7 +48,7 @@ export default function Home() {
       setStatus('success');
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err.message);
+      setErr(err.message);
     }
   };
 
@@ -64,69 +56,76 @@ export default function Home() {
     <>
       <Head>
         <title>Chicago Roleplay — Allow-List</title>
-        <meta name="description" content="Solicite sua vaga no servidor de roleplay mais imersivo do Brasil." />
+        <meta name="description" content="Solicite sua vaga no servidor Chicago RP." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <div className={styles.page}>
-        {/* ── HERO ── */}
-        <header className={styles.hero}>
+
+        {/* TOPBAR */}
+        <header className={styles.topbar}>
+          <div className={styles.topbarLogo}>
+            <span className={styles.logoBox}>CT</span>
+            <div>
+              <div className={styles.logoTitle}>CHICAGO <span className={styles.logoSub}>Tools RP</span></div>
+              <div className={styles.logoTagline}>ALLOW-LIST SYSTEM</div>
+            </div>
+          </div>
+          <div className={styles.topbarLine} />
+        </header>
+
+        {/* HERO */}
+        <section className={styles.hero}>
           <div className={styles.heroGrid} />
           <div className={styles.heroBg} />
           <div className={styles.heroContent}>
-            <div className={styles.badge}>🏙️ FiveM Roleplay</div>
             <h1 className={styles.title}>
-              <span className={styles.titleLine1}>CHICAGO</span>
-              <span className={styles.titleLine2}>ROLEPLAY</span>
+              <span className={styles.t1}>CHICAGO</span>
+              <span className={styles.t2}>ROLEPLAY</span>
             </h1>
             <p className={styles.subtitle}>
               A cidade nunca dorme — e nem suas ambições.<br />
-              Solicite sua vaga na allow-list e faça parte da história.
+              Solicite sua vaga e faça parte da história.
             </p>
             <div className={styles.stats}>
               <div className={styles.stat}><span>500+</span><small>Membros</small></div>
-              <div className={styles.statDivider} />
+              <div className={styles.statDiv} />
               <div className={styles.stat}><span>24/7</span><small>Online</small></div>
-              <div className={styles.statDivider} />
+              <div className={styles.statDiv} />
               <div className={styles.stat}><span>RP</span><small>Sério</small></div>
             </div>
           </div>
           <div className={styles.scrollHint}>▼</div>
-        </header>
-
-        {/* ── INFO STRIP ── */}
-        <section className={styles.infoStrip}>
-          <div className={styles.infoItem}>
-            <span className={styles.infoIcon}>⚠️</span>
-            <span>Idade mínima: <strong>16 anos</strong></span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.infoIcon}>⏱️</span>
-            <span>Análise em até <strong>48 horas</strong></span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.infoIcon}>📋</span>
-            <span>Leia as <strong>regras do servidor</strong> antes</span>
-          </div>
         </section>
 
-        {/* ── FORM ── */}
+        {/* INFO STRIP */}
+        <div className={styles.infoStrip}>
+          {[
+            ['⚠️', 'Idade mínima:', '16 anos'],
+            ['⏱️', 'Análise em até:', '48 horas'],
+            ['📋', 'Leia as', 'regras do servidor'],
+          ].map(([icon, pre, strong]) => (
+            <div className={styles.infoItem} key={pre}>
+              <span>{icon}</span>
+              <span>{pre} <strong>{strong}</strong></span>
+            </div>
+          ))}
+        </div>
+
+        {/* FORM */}
         <main className={styles.main}>
-          <div className={styles.formContainer}>
+          <div className={styles.formWrap}>
             <div className={styles.formHeader}>
-              <div className={styles.formHeaderLine} />
+              <div className={styles.fhLine} />
               <h2>FORMULÁRIO DE ALLOW-LIST</h2>
-              <div className={styles.formHeaderLine} />
+              <div className={styles.fhLine} />
             </div>
 
             {status === 'success' ? (
               <div className={styles.successBox}>
                 <div className={styles.successIcon}>✓</div>
                 <h3>Candidatura Enviada!</h3>
-                <p>
-                  Sua solicitação foi recebida com sucesso. Nossa equipe irá analisá-la e
-                  você receberá um retorno via Discord em até <strong>48 horas</strong>.
-                </p>
+                <p>Nossa equipe irá analisar e você receberá retorno via Discord em até <strong>48 horas</strong>.</p>
                 <button className={styles.resetBtn} onClick={() => { setStatus('idle'); setForm({}); }}>
                   Enviar outra candidatura
                 </button>
@@ -136,10 +135,37 @@ export default function Home() {
                 {FIELDS.map((field) => (
                   <div className={styles.fieldGroup} key={field.id}>
                     <label htmlFor={field.id} className={styles.label}>
-                      {field.label}
-                      {field.required && <span className={styles.req}>*</span>}
+                      {field.label}{field.required && <span className={styles.req}>*</span>}
                     </label>
-                    {field.type === 'textarea' ? (
+
+                    {field.type === 'chatlog' ? (
+                      <div className={styles.chatlogBlock}>
+                        <div className={styles.sceneWrap}>
+                          <img src={SCENE_IMG} alt="Cena para interpretar" className={styles.sceneImg} />
+                          <div className={styles.sceneOverlay}>
+                            <span>📷 Interprete esta cena em chatlog</span>
+                          </div>
+                        </div>
+                        <div className={styles.legend}>
+                          {LEGEND.map(({ prefix, color, label }) => (
+                            <div className={styles.legendItem} key={prefix}>
+                              <span className={styles.legendBadge} style={{ color, borderColor: color + '50', background: color + '18' }}>{prefix}</span>
+                              <span className={styles.legendLabel}>{label}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <textarea
+                          id={field.id}
+                          className={styles.chatlogTextarea}
+                          placeholder={field.placeholder}
+                          required={field.required}
+                          minLength={field.minLength}
+                          rows={10}
+                          value={form[field.id] || ''}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    ) : field.type === 'textarea' ? (
                       <textarea
                         id={field.id}
                         className={styles.textarea}
@@ -165,30 +191,19 @@ export default function Home() {
                   </div>
                 ))}
 
-                {status === 'error' && (
-                  <div className={styles.errorBox}>⚠ {errorMsg}</div>
-                )}
+                {status === 'error' && <div className={styles.errorBox}>⚠ {errorMsg}</div>}
 
-                <button
-                  type="submit"
-                  className={styles.submitBtn}
-                  disabled={status === 'loading'}
-                >
-                  {status === 'loading' ? (
-                    <span className={styles.loader} />
-                  ) : (
-                    'ENVIAR CANDIDATURA'
-                  )}
+                <button type="submit" className={styles.submitBtn} disabled={status === 'loading'}>
+                  {status === 'loading' ? <span className={styles.loader} /> : 'ENVIAR CANDIDATURA'}
                 </button>
               </form>
             )}
           </div>
         </main>
 
-        {/* ── FOOTER ── */}
         <footer className={styles.footer}>
           <p>© {new Date().getFullYear()} Chicago Roleplay · Todos os direitos reservados</p>
-          <p className={styles.footerMuted}>FiveM · Roleplay Sério · Brasil</p>
+          <p className={styles.footerMono}>FiveM · Roleplay Sério · Brasil</p>
         </footer>
       </div>
     </>
