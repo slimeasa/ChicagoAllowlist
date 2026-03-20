@@ -1,0 +1,149 @@
+╔═══════════════════════════════════════════════════════════════╗
+║           🔑 CHAVEIRO - GUIA RÁPIDO DE INSTALAÇÃO            ║
+╚═══════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 1: ESTRUTURA DE ARQUIVOS                               │
+└───────────────────────────────────────────────────────────────┘
+
+Coloque a pasta 'chaveiro' em: resources/[esx]/chaveiro/
+
+Estrutura final:
+└── resources/
+    └── [esx]/
+        └── chaveiro/
+            ├── fxmanifest.lua
+            ├── config.lua
+            ├── README.md
+            ├── item_example.lua
+            ├── INTEGRATION_EXAMPLES.lua
+            ├── client/
+            │   └── main.lua
+            └── server/
+                └── main.lua
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 2: CONFIGURAR O ITEM NO OX_INVENTORY                   │
+└───────────────────────────────────────────────────────────────┘
+
+1. Abra: ox_inventory/data/items.lua
+
+2. Adicione o seguinte código:
+
+['car_key'] = {
+    label = 'Chave de Veículo',
+    weight = 50,
+    stack = false,
+    close = true,
+    description = 'Chave de um veículo',
+    client = {
+        image = 'car_key.png'
+    }
+},
+
+3. Baixe uma imagem de chave de carro e salve como:
+   ox_inventory/web/images/car_key.png
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 3: ADICIONAR AO SERVER.CFG                             │
+└───────────────────────────────────────────────────────────────┘
+
+Adicione esta linha no seu server.cfg:
+
+ensure chaveiro
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 4: CONFIGURAR (OPCIONAL)                               │
+└───────────────────────────────────────────────────────────────┘
+
+Edite o arquivo config.lua para personalizar:
+
+• Localização do NPC
+• Preços das chaves
+• Nome do item de chave
+• Tempo de fabricação
+• Mensagens do sistema
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 5: INTEGRAÇÃO COM SEU SISTEMA DE CHAVES               │
+└───────────────────────────────────────────────────────────────┘
+
+⚠️ IMPORTANTE: Este script cria o item da chave no inventário.
+
+Se você usa um sistema de chaves diferente:
+1. Abra INTEGRATION_EXAMPLES.lua
+2. Encontre o exemplo do seu sistema
+3. Edite server/main.lua conforme o exemplo
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PASSO 6: INICIAR O SERVIDOR                                  │
+└───────────────────────────────────────────────────────────────┘
+
+Reinicie seu servidor ou use:
+restart chaveiro
+
+ou
+
+ensure chaveiro
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ TUDO PRONTO! 🎉                                              │
+└───────────────────────────────────────────────────────────────┘
+
+O chaveiro estará localizado em:
+📍 -1110.0062, -1694.2411, 4.5646
+
+Procure pelo blip 🔑 no mapa!
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ COMANDOS ÚTEIS                                               │
+└───────────────────────────────────────────────────────────────┘
+
+Para ADMINS:
+/darchave [id] [placa] [veículo] [quantidade]
+
+Exemplo:
+/darchave 1 ABC1234 Sultan 1
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ PROBLEMAS COMUNS                                             │
+└───────────────────────────────────────────────────────────────┘
+
+❌ NPC não aparece:
+   → Verifique se as coordenadas estão corretas no config.lua
+   → Verifique o console por erros
+
+❌ Menu não abre:
+   → Certifique-se que ox_lib está instalado e funcionando
+   → Verifique se ox_target está instalado (opcional)
+
+❌ Sem veículos no menu:
+   → Verifique se você tem veículos na garagem
+   → Verifique a tabela owned_vehicles no database
+
+❌ Chave não é adicionada:
+   → Verifique se o item car_key está no ox_inventory
+   → Verifique se o nome do item no config.lua está correto
+
+
+┌───────────────────────────────────────────────────────────────┐
+│ SUPORTE E CUSTOMIZAÇÃO                                       │
+└───────────────────────────────────────────────────────────────┘
+
+📖 Leia o README.md para informações detalhadas
+🔧 Leia INTEGRATION_EXAMPLES.lua para integrar com outros sistemas
+⚙️ Edite config.lua para personalizar tudo
+
+═══════════════════════════════════════════════════════════════
+
+        Desenvolvido com ❤️ para a comunidade FiveM
+        
+═══════════════════════════════════════════════════════════════
